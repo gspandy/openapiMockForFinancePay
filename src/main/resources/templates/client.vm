@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ApiClient</title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="//cdn.bootcss.com/jquery/2.2.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/jquery.form/3.51/jquery.form.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <h3>ApiClient</h3>
+    <p class="text-info">
+        1. 点击"请求链接","服务名","PartnerId"可切换成输入模式</br>
+        2. 请求数据输入格式如：</br>
+<pre>
+sendTime=2016-05-16 00:00:00
+systemName=neverstop
+</pre>
+
+    </p>
+    <form action="/client.json" method="post" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-xs-1 control-label" id="url-label">请求链接:</label>
+            <div class="col-xs-11">
+                <select name="url" class="form-control">
+                    #foreach($url in $urls)
+                        <option value="$!url.getKey()">$!url.value</option>
+                    #end
+                </select>
+                <input name="url" type="text" class="form-control" style="display: none" disabled
+                    placeholder="输入API地址"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-1 control-label" id="service-label">服务名:</label>
+            <div class="col-xs-11">
+                <select name="service" class="form-control">
+                    #foreach($service in $services)
+                        <option value="$!service.key">$!service.value</option>
+                    #end
+                </select>
+                <input name="service" type="text" class="form-control" style="display: none" disabled
+                       placeholder="输入服务名"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-1 control-label" id="partnerId-label">PartnerId:</label>
+            <div class="col-xs-11">
+                <select name="partnerId" class="form-control">
+                    #foreach($partnerId in $partnerIds)
+                        <option value="$!partnerId.key">$!partnerId.value</option>
+                    #end
+                </select>
+                <input name="partnerId" type="text" class="form-control" style="display: none" disabled
+                       placeholder="输入商户ID"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-1 control-label">安全校验码:</label>
+            <div class="col-xs-11">
+                <input name="securityCode" type="password" value="" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-1 control-label">请求数据:</label>
+            <div class="col-xs-11">
+                <textarea name="data" class="form-control" rows="10"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-offset-1 col-xs-11">
+                <button type="submit" class="btn btn-primary">请求</button>
+                <button type="reset" class="btn btn-default">清除</button>
+            </div>
+        </div>
+    </form>
+
+    <p id="status_wrap"></p>
+</div>
+
+<script type="application/javascript">
+
+    var switch_required = ['url', 'service', 'partnerId'];
+    for (var index in switch_required) {
+        var switcher_name = switch_required[index];
+        var select = $('select[name='+switcher_name+']');
+        var input = $('input[name='+switcher_name+']');
+
+        $('#'+switcher_name+'-label')
+                .data('select',select)
+                .data('input',input)
+                .click(function () {
+            var _select = $(this).data('select');
+            var _input = $(this).data('input');
+
+            if (_select.attr('disabled') == 'disabled') {
+                _select.removeAttr('disabled').show();
+                _input.attr('disabled', 'disabled').hide();
+            } else {
+                _select.attr('disabled', 'disabled').hide();
+                _input.removeAttr('disabled').show();
+            }
+        });
+    }
+
+</script>
+
+</body>
+</html>
